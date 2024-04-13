@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+}
+
+.parallx1 {
+  background-image: url('https://news.uchicago.edu/sites/default/files/styles/full_width/public/images/2022-08/stethoscope.jpg?itok=PbySpDQp');
+  position: relative;
+  padding: 80px 0;
+  background: linear-gradient((0, 0, 0.5), (0, 0, 0.5));
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: 450px;
+}
+
+.parallx2 {
+  background-image: url('https://myrnss.com/wp-content/uploads/2019/05/bigstock-Doctor-Working-In-Hospital-Wit-270697225.jpg');
+  position: relative;
+  padding: 80px 0;
+  background: linear-gradient((0, 0, 0.5), (0, 0, 0.5));
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  height: 450px;
+}
+
+
+
+
+.blink{
+  color:#e30707 !important; 
+  animation: animate 1s linear infinite; 
+ 
+}
+
+@keyframes animate{ 
+  0%{ 
+    opacity: 0; 
+  } 
+  50%{ 
+    opacity: 0.7; 
+  } 
+  100%{ 
+    opacity: 0; 
+  } 
+} 
+
+.appimg{
+  background-image: url('https://sreechandhospital.com/wp-content/themes/sreechand/images/inshurance.jpg');
+  height: 300px;
+  width: auto;
+  /* filter: brightness(80%); */
+  
+}
+
