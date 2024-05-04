@@ -6,6 +6,12 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import Appointment from './pages/Appointment'
 import Dashboard from './pages/Dashboard'
 import Doctors from './pages/Doctors'
+import DoctorDashboard from './pages/DoctorDashboard'
+import Careers from './pages/Careers'
+import AppointmentsRecieved from './pages/AppointmentsRecieved'
+import Jobs from './pages/Jobs'
+import ApplicationReceived from './pages/ApplicationReceived'
+import DoctorAdmin from './pages/DoctorAdmin'
 
 function App() {
 
@@ -18,6 +24,12 @@ function App() {
       <Route path='/appointment' element={<Appointment/>}/>
       <Route path='/dashboard' element={<Dashboard/>}/>
       <Route path='/doctors' element={<Doctors/>}/>
+      <Route path='/doctordashboard' element={<DoctorDashboard/>}/>
+      <Route path='/careers' element={<Careers/>}/>
+      <Route path='/appointmentsreceived' element={<AppointmentsRecieved/>}/>
+      <Route path='/jobs' element={<Jobs/>}/>
+      <Route path='/applicationreceived' element={<ApplicationReceived/>}/>
+      <Route path='/doctoradmin' element={<DoctorAdmin/>}/>
       <Route path='/*' element={<Navigate to={'/'}/>}/>
     </Routes>
 

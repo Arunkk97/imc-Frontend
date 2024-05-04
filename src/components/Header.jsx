@@ -1,17 +1,36 @@
-import React from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Container, Row } from 'react-bootstrap';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logos from '../assets/logos.png'
-
+import { tokenAuthContext } from '../context/TokenAuth';
 
 function Header({ insideAuth }) {
+
+    const { isAuthorised, setIsAuthorised } = useContext(tokenAuthContext)
+    const navigate = useNavigate()
+
+    const logout = () => {
+        sessionStorage.clear()
+        setIsAuthorised(false)
+        //   navigate('/')
+        window.location.reload()
+    }
+
+    const [status, setStatus] = useState()
+
+    useEffect(() => {
+        if (sessionStorage.getItem('token')) {
+            setStatus(true)
+        } else {
+            setStatus(false)
+        }
+    }, [])
+
     return (
         <>
-
             {/* sticky top */}
-
             <Container fluid className='tophead ' style={{ backgroundColor: "#050c6c" }}>
                 <Row>
                     <div className="col-lg-12 d-flex justify-content-start my-2 ps-5" style={{ color: '#8f8989' }}>
@@ -22,9 +41,7 @@ function Header({ insideAuth }) {
                 </Row>
             </Container>
 
-
             {/* navbar */}
-
             <Navbar sticky='top' expand="lg" className="bg-body-tertiary ">
                 <Container>
                     <Navbar.Brand >
@@ -35,17 +52,23 @@ function Header({ insideAuth }) {
                         <Nav className="mx-auto ">
                             <Nav.Link className='text-dark fw-bolder'><Link className='text-decoration-none text-dark' to={'/'}>HOME</Link></Nav.Link>
                             <Nav.Link className='text-dark fw-bolder'><Link className='text-decoration-none text-dark' to={'/doctors'}>DOCTORS</Link></Nav.Link>
-                            <Nav.Link className='text-dark fw-bolder'>HOSPITALS</Nav.Link>
-                            <Nav.Link href='#contact'  className='text-dark fw-bolder'>CONTACT</Nav.Link>
+                            <Nav.Link className='text-dark fw-bolder'><Link className='text-decoration-none text-dark' to={'/careers'}>CAREERS</Link></Nav.Link>
+                            <Nav.Link href='#contact' className='text-dark fw-bolder'>CONTACT</Nav.Link>
                             <Nav.Link className=' fw-bolder blink '><Link className='text-decoration-none text-danger' to={'/appointment'}>APPOINTMENT</Link></Nav.Link>
                         </Nav>
-                        {insideAuth &&
-                            <Link to={'/login'}>  <button className='btn btn-outline-success'>Sign In</button></Link>
+                        {/* {insideAuth &&
+                            <Link to={'/login'}>  <button className='btn btn-outline-success rounded'>Sign In</button></Link>
+                        } */}
+
+                        {status ?
+                            <button onClick={logout} className='btn btn-outline-danger rounded'>Sign Out</button>
+                            :
+                            <Link to={'/login'}>  <button className='btn btn-outline-success rounded'>Sign In</button></Link>
+
                         }
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-
         </>
     )
 }

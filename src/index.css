@@ -11,7 +11,7 @@
 }
 
 .parallx1 {
-  background-image: url('https://news.uchicago.edu/sites/default/files/styles/full_width/public/images/2022-08/stethoscope.jpg?itok=PbySpDQp');
+  background-image: url('./assets/p1.jpg');
   position: relative;
   padding: 80px 0;
   background: linear-gradient((0, 0, 0.5), (0, 0, 0.5));
@@ -22,7 +22,7 @@
 }
 
 .parallx2 {
-  background-image: url('https://myrnss.com/wp-content/uploads/2019/05/bigstock-Doctor-Working-In-Hospital-Wit-270697225.jpg');
+  background-image: url('./assets//p2.jpg');
   position: relative;
   padding: 80px 0;
   background: linear-gradient((0, 0, 0.5), (0, 0, 0.5));
@@ -54,10 +54,18 @@
 } 
 
 .appimg{
-  background-image: url('https://sreechandhospital.com/wp-content/themes/sreechand/images/inshurance.jpg');
+  background-image: url('./assets//appoint.jpg');
   height: 300px;
   width: auto;
   /* filter: brightness(80%); */
   
 }
 
+
+
+/* .appoint{
+  background-image: url('https://t3.ftcdn.net/jpg/04/96/80/34/360_F_496803433_TeCu85tBSH36XkKklQ4Eu6Zc5EbZQgs5.jpg');
+  height: 400px;
+  width: 100%;
+  background-size: cover;
+} */
