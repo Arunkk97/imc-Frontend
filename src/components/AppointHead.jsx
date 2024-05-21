@@ -17,6 +17,19 @@ function AppointHead() {
     console.log(bookingDetails.department);
     console.log(allDocAppoint);
 
+    const [validate, setvalidate] = useState(false)
+    const [dateError, setdateError] = useState("")
+
+    const handleDateBlur = (e) => {
+        const selectedDate = new Date(e.target.value);
+        const today = new Date();
+        if (selectedDate <= today) {
+            setdateError("Appointment date cannot be in the past or today!");
+        } else {
+            setdateError("")
+        }
+    }
+
     useEffect(() => {
         getAllDocAndDep()
     }, [bookingDetails.department])
@@ -54,53 +67,68 @@ function AppointHead() {
         }
     }, [])
 
+
+
     const handleSubmit = async (e) => {
         e.preventDefault()
-        const { name, email, phone, age, gender, appointmentDate, department, doctor, remarks } = bookingDetails
-        if (loginStatus) {
-            if (!name || !email || !phone || !age || !gender || !appointmentDate || !department || !doctor && remarks) {
-                toast.warning('Please fill the form completely!!!')
-            } else {
-                const reqBody = new FormData()
+        const form = e.currentTarget
+        if (form.checkValidity() === false) {
+            e.stopPropagation()
+        } else {
+            const { name, email, phone, age, gender, appointmentDate, department, doctor, remarks } = bookingDetails
+            const today = new Date();
+            const selectedDate = new Date(appointmentDate);
 
-                reqBody.append("name", name)
-                reqBody.append("email", email)
-                reqBody.append("phone", phone)
-                reqBody.append("age", age)
-                reqBody.append("gender", gender)
-                reqBody.append("appointmentDate", appointmentDate)
-                reqBody.append("department", department)
-                reqBody.append("doctor", doctor)
-                reqBody.append("remarks", remarks)
+            if (selectedDate <= today) {
+                toast.warning("Appointment date cannot be in the past or today!");
+                return
+            }
+            if (loginStatus) {
+                if (!name || !email || !phone || !age || !gender || !appointmentDate || !department || !doctor && remarks) {
+                    toast.warning('Please fill the form completely!!!')
+                } else {
+                    const reqBody = new FormData()
 
-                const token = sessionStorage.getItem("token")
+                    reqBody.append("name", name)
+                    reqBody.append("email", email)
+                    reqBody.append("phone", phone)
+                    reqBody.append("age", age)
+                    reqBody.append("gender", gender)
+                    reqBody.append("appointmentDate", appointmentDate)
+                    reqBody.append("department", department)
+                    reqBody.append("doctor", doctor)
+                    reqBody.append("remarks", remarks)
 
-                if (token) {
-                    const reqHeader = {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${token}`
-                    }
-                    try {
-                        const result = await bookAppointmentAPI(reqBody, reqHeader)
-                        console.log(result);
-                        if (result.status == 200) {
-                            toast.success('Your Appointment has Booked Successfully !!!')
-                            setBookingDetails({ name: '', email: '', phone: '', age: '', gender: '', appointmentDate: '', department: '', doctor: '', remarks: '' })
-                            setTimeout(() => {
-                                navigate('/doctordashboard')
-                            }, 2000)
+                    const token = sessionStorage.getItem("token")
+
+                    if (token) {
+                        const reqHeader = {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${token}`
                         }
-                    } catch (err) {
-                        console.log(err);
+                        try {
+                            const result = await bookAppointmentAPI(reqBody, reqHeader)
+                            console.log(result);
+                            if (result.status == 200) {
+                                toast.success('Your Appointment has Booked Successfully !!!')
+                                setBookingDetails({ name: '', email: '', phone: '', age: '', gender: '', appointmentDate: '', department: '', doctor: '', remarks: '' })
+                                setTimeout(() => {
+                                    navigate('/doctordashboard')
+                                }, 2000)
+                            }
+                        } catch (err) {
+                            console.log(err);
+                        }
                     }
                 }
+            } else {
+                toast.warning('Please login!!!')
+                setTimeout(() => {
+                    navigate('/login')
+                }, 2000)
             }
-        } else {
-            toast.warning('Please login!!!')
-            setTimeout(() => {
-                navigate('/login')
-            }, 2000)
         }
+        setvalidate(true)
     }
 
     return (
@@ -111,7 +139,7 @@ function AppointHead() {
 
             <Container className='mt-5 shadow p-5'>
 
-                <Form>
+                <Form noValidate validated={validate} onSubmit={handleSubmit}>
                     <Row>
                         <Col md={6}>
                             <Form.Group className='mb-3' controlId="name">
@@ -122,6 +150,7 @@ function AppointHead() {
                                     placeholder="Enter your name"
                                     required
                                 />
+                                <Form.Control.Feedback type='invalid'>Please enter your name</Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                         <Col md={6}>
@@ -132,7 +161,9 @@ function AppointHead() {
                                     type="email"
                                     placeholder="Enter your email"
                                     required
+                                    pattern='[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
                                 />
+                                <Form.Control.Feedback type='invalid'>Please enter valid email address</Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                     </Row>
@@ -145,7 +176,9 @@ function AppointHead() {
                                     type="tel"
                                     placeholder="Enter your phone number"
                                     required
+                                    pattern='[0-9]{10}'
                                 />
+                                <Form.Control.Feedback type='invalid'>Please enter valid phone number</Form.Control.Feedback>
                             </Form.Group>
                         </Col>
                         <Col md={6}>
@@ -156,7 +189,10 @@ function AppointHead() {
                                     type="number"
                                     placeholder="Enter your age"
                                     required
+                                    min='0'
                                 />
+                                <Form.Control.Feedback type='invalid'>Please enter your age</Form.Control.Feedback>
+
                             </Form.Group>
                         </Col>
                     </Row>
@@ -175,16 +211,22 @@ function AppointHead() {
                                     <option value="female">Female</option>
                                     <option value="other">Other</option>
                                 </Form.Select>
+                                <Form.Control.Feedback type='invalid'>Please select your gender</Form.Control.Feedback>
+
                             </Form.Group>
                         </Col>
                         <Col md={6}>
                             <Form.Group className='mb-3' controlId="appointmentDate">
                                 <Form.Label>Appointment Date</Form.Label>
                                 <Form.Control
+                                    onBlur={handleDateBlur}
                                     value={bookingDetails.appointmentDate} onChange={(e) => setBookingDetails({ ...bookingDetails, appointmentDate: e.target.value })}
                                     type="date"
                                     required
                                 />
+                                <Form.Control.Feedback type='invalid'>Please select Appointment date</Form.Control.Feedback>
+
+                                {dateError && <div className='text-danger'>{dateError}</div>}
                             </Form.Group>
                         </Col>
                     </Row>
@@ -204,11 +246,9 @@ function AppointHead() {
                                         ))
                                     }
 
-                                    {/* <option value="Neurology">Neurology</option>
-                                    <option value="Nephrology">Nephrology</option>
-                                    <option value="Orthopaedics">Orthopaedics</option>
-                                    <option value="Pulmonology">Pulmonology</option> */}
                                 </Form.Select>
+                                <Form.Control.Feedback type='invalid'>Please select a doctor</Form.Control.Feedback>
+
                             </Form.Group>
                         </Col>
                         <Col md={6}>
@@ -225,12 +265,10 @@ function AppointHead() {
                                         doc?.map(docc => (
                                             <option value={docc.name}>{docc.name}</option>
                                         ))
-
                                     }
-
-                                    {/* <option value="Doc 2">Doc 2</option>
-                                    <option value="Doc 3">Doc 3</option> */}
                                 </Form.Select>
+                                <Form.Control.Feedback type='invalid'>Please select a doctor</Form.Control.Feedback>
+
                             </Form.Group>
                         </Col>
                     </Row>
@@ -247,7 +285,7 @@ function AppointHead() {
                             </Form.Group>
                         </Col>
                     </Row>
-                    <Button onClick={handleSubmit} className='mt-3' variant="primary" type="submit">
+                    <Button className='mt-3' variant="primary" type="submit">
                         Submit
                     </Button>
                 </Form>

@@ -8,7 +8,7 @@ import { SERVER_URL } from '../services/serverURL';
 import { docEditResponseContext } from '../context/ContextApi';
 
 function EditDoctor({ displayData }) {
-    const{docEditResponse, setdocEditResponse}=useContext(docEditResponseContext)
+    const { docEditResponse, setdocEditResponse } = useContext(docEditResponseContext)
     const [updateDocDetails, setUpdateDocDetails] = useState({
         id: displayData?._id, name: displayData?.name, address: displayData?.address, phone: displayData?.phone, email: displayData?.email, qualification: displayData?.qualification, department: displayData?.department, doctorImage: ""
     })
@@ -21,10 +21,10 @@ function EditDoctor({ displayData }) {
             setPreview("")
         }
     }, [updateDocDetails?.doctorImage])
-  
+
     const handleUpdate = async () => {
         const { name, address, phone, email, qualification, department, doctorImage } = updateDocDetails
-        if (!name || !address || !phone || !email || !qualification || !department ) {
+        if (!name || !address || !phone || !email || !qualification || !department) {
             toast.warning('Please fill the form completely!!!')
         } else {
             //proceed to api call
@@ -66,11 +66,11 @@ function EditDoctor({ displayData }) {
     const [show, setShow] = useState(false);
     const handleClose = () => {
         setShow(false);
-        setUpdateDocDetails({ id: displayData?._id, name: displayData?.name, address: displayData?.address, phone: displayData?.phone, email: displayData?.email, qualification: displayData?.qualification, department: displayData?.department, doctorImage:""})
+        setUpdateDocDetails({ id: displayData?._id, name: displayData?.name, address: displayData?.address, phone: displayData?.phone, email: displayData?.email, qualification: displayData?.qualification, department: displayData?.department, doctorImage: "" })
     }
     const handleShow = () => {
         setShow(true);
-        setUpdateDocDetails({ id: displayData?._id, name: displayData?.name, address: displayData?.address, phone: displayData?.phone, email: displayData?.email, qualification: displayData?.qualification, department: displayData?.department, doctorImage:"" })
+        setUpdateDocDetails({ id: displayData?._id, name: displayData?.name, address: displayData?.address, phone: displayData?.phone, email: displayData?.email, qualification: displayData?.qualification, department: displayData?.department, doctorImage: "" })
     }
     return (
         <>
